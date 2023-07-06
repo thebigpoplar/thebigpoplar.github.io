@@ -1,0 +1,292 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>修复项目中的 block 和 major | SailY Blog</title><meta name="author" content="SailY"><meta name="copyright" content="SailY"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="no-multi-assign 禁止使用链式赋值表达式，链接变量的赋值可能会导致意外结果并且难以阅读，此规则不允许在单个语句中使用多个赋值。  1234567891011121314&#x2F;&#x2F; incorrect codevar a &#x3D; b &#x3D; c &#x3D; 5;const foo &#x3D; bar &#x3D; &quot;baz&quot;;let a &#x3D;    b &#x3D;    c;class Foo &amp;#123;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="修复项目中的 block 和 major">
+<meta property="og:url" content="http://example.com/2023/07/06/eslint-block/index.html">
+<meta property="og:site_name" content="SailY Blog">
+<meta property="og:description" content="no-multi-assign 禁止使用链式赋值表达式，链接变量的赋值可能会导致意外结果并且难以阅读，此规则不允许在单个语句中使用多个赋值。  1234567891011121314&#x2F;&#x2F; incorrect codevar a &#x3D; b &#x3D; c &#x3D; 5;const foo &#x3D; bar &#x3D; &quot;baz&quot;;let a &#x3D;    b &#x3D;    c;class Foo &amp;#123;">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://gzw.sinaimg.cn/mw690/0065BA7Bgy1hfmiq1gfijj31c20w8tmk.jpg">
+<meta property="article:published_time" content="2023-07-06T15:00:26.000Z">
+<meta property="article:modified_time" content="2023-07-06T15:13:45.978Z">
+<meta property="article:author" content="SailY">
+<meta property="article:tag" content="前端">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gzw.sinaimg.cn/mw690/0065BA7Bgy1hfmiq1gfijj31c20w8tmk.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2023/07/06/eslint-block/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":50,"languages":{"author":"作者: SailY","link":"链接: ","source":"来源: SailY Blog","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '修复项目中的 block 和 major',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-07-06 23:13:45'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>(()=>{
+  const $loadingBox = document.getElementById('loading-box')
+  const $body = document.body
+  const preloader = {
+    endLoading: () => {
+      $body.style.overflow = ''
+      $loadingBox.classList.add('loaded')
+    },
+    initLoading: () => {
+      $body.style.overflow = 'hidden'
+      $loadingBox.classList.remove('loaded')
+    }
+  }
+
+  preloader.initLoading()
+  window.addEventListener('load',() => { preloader.endLoading() })
+
+  if (false) {
+    document.addEventListener('pjax:send', () => { preloader.initLoading() })
+    document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+  }
+})()</script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/test.jpeg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">14</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">12</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 链接</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://gzw.sinaimg.cn/mw690/0065BA7Bgy1hfmiq1gfijj31c20w8tmk.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="SailY Blog"><span class="site-name">SailY Blog</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 链接</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></li></ul></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">修复项目中的 block 和 major</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">发表于</span><time datetime="2023-07-06T15:00:26.000Z" title="发表于 2023-07-06 23:00:26">2023-07-06</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Eslint/">Eslint</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">3.1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>11分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="修复项目中的 block 和 major"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h3 id="no-multi-assign"><a href="#no-multi-assign" class="headerlink" title="no-multi-assign"></a>no-multi-assign</h3><blockquote>
+<p>禁止使用链式赋值表达式，链接变量的赋值可能会导致意外结果并且难以阅读，此规则不允许在单个语句中使用多个赋值。</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// incorrect code</span></span><br><span class="line"><span class="keyword">var</span> a = b = c = <span class="number">5</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> foo = bar = <span class="string">&quot;baz&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> a =</span><br><span class="line">    b =</span><br><span class="line">    c;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Foo</span> &#123;</span><br><span class="line">    a = b = <span class="number">10</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">a = b = <span class="string">&quot;quux&quot;</span>;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// correct code</span></span><br><span class="line"><span class="keyword">var</span> a = <span class="number">5</span>;</span><br><span class="line"><span class="keyword">var</span> b = <span class="number">5</span>;</span><br><span class="line"><span class="keyword">var</span> c = <span class="number">5</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> foo = <span class="string">&quot;baz&quot;</span>;</span><br><span class="line"><span class="keyword">const</span> bar = <span class="string">&quot;baz&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> a = c;</span><br><span class="line"><span class="keyword">let</span> b = c;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Foo</span> &#123;</span><br><span class="line">    a = <span class="number">10</span>;</span><br><span class="line">    b = <span class="number">10</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">a = <span class="string">&quot;quux&quot;</span>;</span><br><span class="line">b = <span class="string">&quot;quux&quot;</span>;</span><br></pre></td></tr></table></figure>
+<h3 id="no-this-before-super"><a href="#no-this-before-super" class="headerlink" title="no-this-before-super"></a>no-this-before-super</h3><blockquote>
+<p>在构造函数中调用之前禁止this&#x2F;supersuper()，在派生类的构造函数中，如果在调用之前使用this&#x2F; ，则会引发引用错误。supersuper()，此规则检查构造函数中的this&#x2F;super关键字，然后报告 之前的关键字super()。</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// incorrect code</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">A</span> <span class="keyword">extends</span> <span class="title class_ inherited__">B</span> &#123;</span><br><span class="line">    <span class="title function_">constructor</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">a</span> = <span class="number">0</span>;</span><br><span class="line">        <span class="variable language_">super</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">A</span> <span class="keyword">extends</span> <span class="title class_ inherited__">B</span> &#123;</span><br><span class="line">    <span class="title function_">constructor</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="variable language_">this</span>.<span class="title function_">foo</span>();</span><br><span class="line">        <span class="variable language_">super</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">A</span> <span class="keyword">extends</span> <span class="title class_ inherited__">B</span> &#123;</span><br><span class="line">    <span class="title function_">constructor</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="variable language_">super</span>.<span class="title function_">foo</span>();</span><br><span class="line">        <span class="variable language_">super</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">A</span> <span class="keyword">extends</span> <span class="title class_ inherited__">B</span> &#123;</span><br><span class="line">    <span class="title function_">constructor</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="variable language_">super</span>(<span class="variable language_">this</span>.<span class="title function_">foo</span>());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// correct code</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">A</span> &#123;</span><br><span class="line">    <span class="title function_">constructor</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">a</span> = <span class="number">0</span>; <span class="comment">// OK, this class doesn&#x27;t have an `extends` clause.</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">A</span> <span class="keyword">extends</span> <span class="title class_ inherited__">B</span> &#123;</span><br><span class="line">    <span class="title function_">constructor</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="variable language_">super</span>();</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">a</span> = <span class="number">0</span>; <span class="comment">// OK, this is after `super()`.</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">A</span> <span class="keyword">extends</span> <span class="title class_ inherited__">B</span> &#123;</span><br><span class="line">    <span class="title function_">foo</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">a</span> = <span class="number">0</span>; <span class="comment">// OK. this is not in a constructor.</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="no-param-reassign"><a href="#no-param-reassign" class="headerlink" title="no-param-reassign"></a>no-param-reassign</h3><blockquote>
+<p>禁止重新分配function参数<br>对声明为函数参数的变量进行赋值可能会产生误导并导致令人困惑的行为，因为修改函数参数也会改变对象arguments。通常，对函数参数的赋值是无意的，并且表明存在错误或程序员错误。<br>该规则也可以配置为在修改函数参数时失败。对参数的副作用可能会导致违反直觉的执行流程，并使错误难以追踪。</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// incorrect code</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">foo</span>(<span class="params">bar</span>) &#123;</span><br><span class="line">    bar = <span class="number">13</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">foo</span>(<span class="params">bar</span>) &#123;</span><br><span class="line">    bar++;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">foo</span>(<span class="params">bar</span>) &#123;</span><br><span class="line">    <span class="keyword">for</span> (bar <span class="keyword">in</span> baz) &#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">foo</span>(<span class="params">bar</span>) &#123;</span><br><span class="line">    <span class="keyword">for</span> (bar <span class="keyword">of</span> baz) &#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// correct code</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">foo</span>(<span class="params">bar</span>) &#123;</span><br><span class="line">    <span class="keyword">var</span> baz = bar;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="default-param-last"><a href="#default-param-last" class="headerlink" title="default-param-last"></a>default-param-last</h3><blockquote>
+<p>默认参数位于最后。</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// incorrect code</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">f</span>(<span class="params">a = <span class="number">0</span>, b: number</span>) &#123;&#125;</span><br><span class="line"><span class="keyword">function</span> <span class="title function_">f</span>(<span class="params">a: number, b = <span class="number">0</span>, c: number</span>) &#123;&#125;</span><br><span class="line"><span class="keyword">function</span> <span class="title function_">f</span>(<span class="params">a: number, b?: number, c: number</span>) &#123;&#125;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Foo</span> &#123;</span><br><span class="line">  <span class="title function_">constructor</span>(<span class="params">public a = <span class="number">10</span>, private b: number</span>) &#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Foo</span> &#123;</span><br><span class="line">  <span class="title function_">constructor</span>(<span class="params">public a?: number, private b: number</span>) &#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// correct code</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">f</span>(<span class="params">a = <span class="number">0</span></span>) &#123;&#125;</span><br><span class="line"><span class="keyword">function</span> <span class="title function_">f</span>(<span class="params">a: number, b = <span class="number">0</span></span>) &#123;&#125;</span><br><span class="line"><span class="keyword">function</span> <span class="title function_">f</span>(<span class="params">a: number, b?: number</span>) &#123;&#125;</span><br><span class="line"><span class="keyword">function</span> <span class="title function_">f</span>(<span class="params">a: number, b?: number, c = <span class="number">0</span></span>) &#123;&#125;</span><br><span class="line"><span class="keyword">function</span> <span class="title function_">f</span>(<span class="params">a: number, b = <span class="number">0</span>, c?: number</span>) &#123;&#125;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Foo</span> &#123;</span><br><span class="line">  <span class="title function_">constructor</span>(<span class="params">public a, private b = <span class="number">0</span></span>) &#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Foo</span> &#123;</span><br><span class="line">  <span class="title function_">constructor</span>(<span class="params">public a, private b?: number</span>) &#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="eqeqeq"><a href="#eqeqeq" class="headerlink" title="eqeqeq"></a>eqeqeq</h3><blockquote>
+<p>使用类型安全的相等运算符 &#x3D;&#x3D;&#x3D; 和 !&#x3D;&#x3D; 而不是其常规对应运算符 &#x3D;&#x3D;和被认为是良好的做法!&#x3D;。<br>● [] &#x3D;&#x3D; false<br>● [] &#x3D;&#x3D; ![]<br>● 3 &#x3D;&#x3D; “03”<br>如果其中之一出现在看似无辜的声明中，那么a &#x3D;&#x3D; b实际问题就很难发现。</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// incorrect code</span></span><br><span class="line">a == b</span><br><span class="line">foo == <span class="literal">true</span></span><br><span class="line">bananas != <span class="number">1</span></span><br><span class="line">value == <span class="literal">undefined</span></span><br><span class="line"><span class="keyword">typeof</span> foo == <span class="string">&#x27;undefined&#x27;</span></span><br><span class="line"><span class="string">&#x27;hello&#x27;</span> != <span class="string">&#x27;world&#x27;</span></span><br><span class="line"><span class="number">0</span> == <span class="number">0</span></span><br><span class="line"><span class="literal">true</span> == <span class="literal">true</span></span><br><span class="line">foo == <span class="literal">null</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// correct code</span></span><br><span class="line">a === b</span><br><span class="line">foo === <span class="literal">true</span></span><br><span class="line">bananas !== <span class="number">1</span></span><br><span class="line">value === <span class="literal">undefined</span></span><br><span class="line"><span class="keyword">typeof</span> foo === <span class="string">&#x27;undefined&#x27;</span></span><br><span class="line"><span class="string">&#x27;hello&#x27;</span> !== <span class="string">&#x27;world&#x27;</span></span><br><span class="line"><span class="number">0</span> === <span class="number">0</span></span><br><span class="line"><span class="literal">true</span> === <span class="literal">true</span></span><br><span class="line">foo === <span class="literal">null</span></span><br></pre></td></tr></table></figure>
+<h3 id="no-use-before-define"><a href="#no-use-before-define" class="headerlink" title="no-use-before-define"></a>no-use-before-define</h3><blockquote>
+<p>在定义变量之前禁止使用变量。</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// incorrect code</span></span><br><span class="line"><span class="keyword">const</span> x = <span class="title class_">Foo</span>.<span class="property">FOO</span>;</span><br><span class="line"></span><br><span class="line">enum <span class="title class_">Foo</span> &#123;</span><br><span class="line">  <span class="variable constant_">FOO</span>,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// correct code</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">foo</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="title class_">Foo</span>.<span class="property">FOO</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">enum <span class="title class_">Foo</span> &#123;</span><br><span class="line">  <span class="variable constant_">FOO</span>,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="如何写出优雅的代码"><a href="#如何写出优雅的代码" class="headerlink" title="如何写出优雅的代码"></a>如何写出优雅的代码</h2><h3 id="渐进式重构"><a href="#渐进式重构" class="headerlink" title="渐进式重构"></a>渐进式重构</h3><p> 渐进式重构是不断地对既有代码进行抽象、分离和组合。做代码重构之前需要回答两个问题：<br>  1、什么样的代码需要重构？<br>  2、何时进行重构？</p>
+<p> 设计不是一蹴而就的，有时候写着写着才发现某些代码可以抽离出来单独使用，需要重构的代码需要满足几个条件：<br> 1、代码后期可复用<br> 2、代码无副作用<br>3、代码逻辑单一</p>
+<p>过早重构可能会因需求变化太快白白浪费许多时间；过晚重构会因为代码逻辑复杂、相似代码积压过多导致变更风险太高，难以维护。渐进式重构如下图所示（红色部分为增加的代码）：<br><img src="https://gzw.sinaimg.cn/orj360/0065BA7Bgy1hfnk9xyt5ej314o09mn5x.jpg"></p>
+<p>首先我们在同一个源文件中新增功能，发现部分代码无副作用且可分离，因此在同一个文件中进行代码分割，形成许多功能单一的模块。如此往复后发现单文件的体积越来越大，此时就可以将功能相关联的模块抽出来放到单独的文件中统一管理，如 helpers、components、constants 等等。</p>
+<h3 id="高内聚低耦合"><a href="#高内聚低耦合" class="headerlink" title="高内聚低耦合"></a>高内聚低耦合</h3><p>高内聚低耦合一直是软件设计领域里亘古不变的话题，重构的目标是提高代码的内聚性，降低各功能间的耦合程度，降低后期维护成本，特别是写业务代码，这一点相当重要。<br>举个栗子，比如新需求希望在现有的产品页面上增加发红包功能，以吸引用户开通某个功能，按照正常逻辑，我需要：<br>1、在当前页面中引入相关依赖<br>2、初始化，查询红包相关信息<br>3、用户点击时，触发红包发送</p>
+<p>白色部分表示上个版本的代码，红色部分表示完成这个需求需要变更的代码：<br><img src="https://gzw.sinaimg.cn/mw690/0065BA7Bgy1hfnka2bsmjj30bg05mabb.jpg"></p>
+<p>这样一来，这个发红包功能就和以前的代码严重耦合，如果这是个只需要上线一周的临时需求，下线代码的时候就是一个高风险的动作；如果上线运行期间还需要对产品页面进行迭代，越往后就越搞不清楚谁是谁了。合理的设计应该是下面这个样子的：</p>
+<p>将和产品代码无关的功能性代码拆分出来，放到另一个文件中内部维护好整个生命周期状态，对外只暴露少量的接口或是方法，这样一来对产品页面的改造只需要：<br>1、引入红包组件<br>2、用户点击时，调用红包组件的发奖方法</p>
+<p>这样的变更是极小的、明确的、可控的。换句话说，整个红包功能是高内聚的，与产品代码是低耦合的。这样实践也带来另一个好处：我得到了一个可复用的红包组件！</p>
+<h3 id="合理冗余"><a href="#合理冗余" class="headerlink" title="合理冗余"></a>合理冗余</h3><p>业务需求是多变的，写出来的代码也是如此，频繁地抽象很可能导致过度设计，一个抽象很可能随着迭代次数的增多变得十分复杂。在存在多个变量的分支业务场景，比如同时包含活动是否过期、是否已参加活动、是否完成一次任务这样的情况，会存在多个嵌套 if-else 结构，这时将代码冗余设计是个不错的选择。下面举一个例子来说明什么是合理冗余：<br>e.g. 有这样一个需求，一开始很简单，需要设计两个运营展位：<br><img src="https://gzw.sinaimg.cn/mw690/0065BA7Bgy1hfnka6y4tyj30ls06c0vk.jpg"></p>
+<p>那么抽象一个组件：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">const Item = (&#123; title, content &#125;) =&gt; (</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &lt;h4&gt;&#123;title&#125;&lt;/h4&gt;</span><br><span class="line">    &lt;p&gt;&#123;content&#125;&lt;/p&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>现在需求要求在第一个展位的标题上增加热文标记：<br><img src="https://gzw.sinaimg.cn/mw690/0065BA7Bgy1hfnkbd3sbpj306l02ajr9.jpg"></p>
+<p>也很容易：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">const Item = (&#123; title, content &#125;, index) =&gt; (</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &lt;h4&gt;&#123;title&#125;&#123;index === 0 &amp;&amp; &lt;span&gt;hot&lt;/span&gt;&#125;&lt;/h4&gt;</span><br><span class="line">    &lt;p&gt;&#123;content&#125;&lt;/p&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>需求又变了，要求：在第一个展位去掉内容，并且在下方加个按钮；第二个展位的标题右边增加一个超链接以及增加一个副标题：<br><img src="https://gzw.sinaimg.cn/mw690/0065BA7Bgy1hfnklmr55jj306l02a0so.jpg"></p>
+<p>这下有点恶心了：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">const Item = (&#123; title, content &#125;, index) =&gt; (</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &lt;h4&gt;</span><br><span class="line">      &#123;title&#125;</span><br><span class="line">      &#123;index === 0 &amp;&amp; &lt;span&gt;hot&lt;/span&gt;&#125;</span><br><span class="line">      &#123;index === 1 &amp;&amp; &lt;a href=&quot;xxx&quot;&gt;去看看&lt;/a&gt;&#125;</span><br><span class="line">    &lt;/h4&gt;</span><br><span class="line">    &#123;index === 1 &amp;&amp; &lt;h5&gt;副标题&lt;/h5&gt;&#125;</span><br><span class="line">    &lt;p&gt;</span><br><span class="line">      &#123;index !== 0 &amp;&amp; content&#125;</span><br><span class="line">      &#123;index === 0 &amp;&amp; &lt;button&gt;领福利&lt;button&gt;&#125;</span><br><span class="line">    &lt;/p&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>可以看到，之前抽象的好好的，现在需求一变，代码就面目全非了，中间混杂着两个状态（第一个、第二个）的判断逻辑。实际情况很可能比这个更复杂，在多状态交织逻辑难以通过一套代码表达清楚时，进行合理冗余就是个不错的选择，将上面的例子用两个 if 重写如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">// 第一个展位</span><br><span class="line">if (index === 0) &#123;</span><br><span class="line">  return (</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">      &lt;h4&gt;标题一&lt;span&gt;hot&lt;/span&gt;&lt;/h4&gt;</span><br><span class="line">      &lt;p&gt;&lt;button&gt;领福利&lt;button&gt;&lt;/p&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br><span class="line">// 第二个展位</span><br><span class="line">if (index === 1) &#123;</span><br><span class="line">  return (</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">      &lt;h4&gt;标题二&lt;a href=&quot;xxx&quot;&gt;去看看&lt;/a&gt;&lt;/h4&gt;</span><br><span class="line">      &lt;h5&gt;副标题&lt;/h5&gt;</span><br><span class="line">      &lt;p&gt;内容&lt;/p&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>合理冗余其实也是一种重构，根据业务逻辑和代码规模，做相似抽象还是代码冗余，这其实也是渐进式重构的一种体现。无论采用何种方式，只要能把业务逻辑表达清楚，让代码始终保持良好的可读性和可维护性，就OK。</p>
+<p>下面介绍一个过度抽象的例子。</p>
+<h3 id="拒绝过度抽象"><a href="#拒绝过度抽象" class="headerlink" title="拒绝过度抽象"></a>拒绝过度抽象</h3><p>在 JavaScript 代码中进行深度抽象有时并非好事，有 OOP（面向对象编程）背景的同学很容易先入为主设计：所有数据结构都想封装成一个类 （Class） 。实际上 Class 在 JavaScript 中是个不好的设计，它并非真正的类。几年前，我曾看到一位 Java 转前端的同学写出了类似这样的代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">class DataItem &#123;</span><br><span class="line">  constructor(id, name, value) &#123;</span><br><span class="line">    this.id = id;</span><br><span class="line">    this.name = name;</span><br><span class="line">    this.value = value;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class DataCollection &#123;</span><br><span class="line">  constructor() &#123;</span><br><span class="line">    this.items = new Array();</span><br><span class="line">  &#125;</span><br><span class="line">  insert(item) &#123;</span><br><span class="line">    this.items.push(item);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">const item1 = new DataItem(1, &#x27;name1&#x27;, 100);</span><br><span class="line">const item2 = new DataItem(2, &#x27;name2&#x27;, 200);</span><br><span class="line">const list = new DataCollection();</span><br><span class="line">list.insert(item1);</span><br><span class="line">list.insert(item2);</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>一股浓浓的 Java 味道扑面而来。上面的代码并没有发挥出 JavaScript 的语言优势，也增加了不少理解成本，如果用面向对象编程的思路去写前端代码，特别是业务代码，可真是一场噩梦。正确的写法如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">const list = [&#123;</span><br><span class="line">  id: 1,</span><br><span class="line">  name: &#x27;name1&#x27;,</span><br><span class="line">  value: 100</span><br><span class="line">&#125;, &#123;</span><br><span class="line">  id: 2,</span><br><span class="line">  name: &#x27;name2&#x27;,</span><br><span class="line">  value: 200</span><br><span class="line">&#125;];</span><br></pre></td></tr></table></figure>
+<p>由于 JS 属于弱类型语言，弱类型语言就要发挥弱类型的优势，无需过多类型定义和 Class 抽象，用最原始的 object 和 function 足以胜任从简单到复杂的业务场景。这里特别想提及前端所熟知的 Redux 状态管理器，Redux 中，state 就是普通的 object，reducer 就是普通的 function，action 也是普通的 object，不加任何类型约束。因为简单，所以强大。</p>
+<h3 id="眼观六路"><a href="#眼观六路" class="headerlink" title="眼观六路"></a>眼观六路</h3><p>用弱类型语言编程意味着无需编译，无需编译的语言天生存在一个问题是在运行前缺少必要的类型检查，将问题暴露在运行时往往会导致非常严重的故障。这就要求开发者能在写代码的阶段严格保证代码质量，特别是写业务代码。<br>集成开发环境（IDE）对 JavaScript 代码的智能提示能力有限，很多时候不能通过 IDE 查找某个变量或者函数的所有引用，这时就要善用 Ctrl + F 进行全局查找来保证自己的单点变更不会影响到其他地方。如果使用 TypeScript，在类型检查、引用查找上的帮助会更好。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>今天给大家分享了关于书写业务代码的一些实践经验：对代码进行渐进式重构是提升代码健壮性的有力武器；设计高内聚低耦合的代码可以让你在做需求的过程中沉淀出一套通用解决方案；合理冗余可以简化复杂的场景，让开发变得高效、测试变得容易；拒绝过度抽象，拥抱简单，灵活变化。保持 眼观六路 的好习惯能让代码质量提升一个台阶。<br>最后，希望大家能在实际开发过程中去体会和学习，不断思考和总结，将业务代码写优雅，是个很大的挑战。</p>
+<blockquote>
+<p>作者：蚂蚁保险体验技术<br>链接：<a target="_blank" rel="noopener" href="https://juejin.cn/post/6844903833546702856">https://juejin.cn/post/6844903833546702856</a><br>来源：掘金</p>
+</blockquote>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://example.com">SailY</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2023/07/06/eslint-block/">http://example.com/2023/07/06/eslint-block/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">SailY Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%89%8D%E7%AB%AF/">前端</a></div><div class="post_share"><div class="social-share" data-image="https://gzw.sinaimg.cn/mw690/0065BA7Bgy1hfmiq1gfijj31c20w8tmk.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2023/07/05/aliyun/" title="如何将前端静态资源部署到阿里云OSS上"><img class="cover" src="https://gzw.sinaimg.cn/mw690/0065BA7Bgy1hfnln2t12cj326o189hbt.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">如何将前端静态资源部署到阿里云OSS上</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2021/03/08/git-01/" title="git 基本常用命令"><img class="cover" src="https://images.unsplash.com/photo-1684610525294-09d57fbdf809?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2053&q=80" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-03-08</div><div class="title">git 基本常用命令</div></div></a></div><div><a href="/2021/03/11/git-02/" title="git 提交规范"><img class="cover" src="https://images.unsplash.com/photo-1563790127827-fc1ccddeee9c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2066&q=80" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-03-11</div><div class="title">git 提交规范</div></div></a></div><div><a href="/2021/03/24/git-03/" title="git 分支重命名操作"><img class="cover" src="https://images.unsplash.com/photo-1629201782169-2ede1f81c89c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-03-24</div><div class="title">git 分支重命名操作</div></div></a></div><div><a href="/2021/03/24/git-04/" title="git 回退到某个版本命名操作"><img class="cover" src="https://images.unsplash.com/photo-1685853995266-d095653bc6d1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2071&q=80" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-03-24</div><div class="title">git 回退到某个版本命名操作</div></div></a></div><div><a href="/2023/03/15/fabric-01/" title="什么是Fabric.js"><img class="cover" src="https://images.unsplash.com/photo-1682695795798-1b31ea040caf?ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-15</div><div class="title">什么是Fabric.js</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#no-multi-assign"><span class="toc-number">1.</span> <span class="toc-text">no-multi-assign</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#no-this-before-super"><span class="toc-number">2.</span> <span class="toc-text">no-this-before-super</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#no-param-reassign"><span class="toc-number">3.</span> <span class="toc-text">no-param-reassign</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#default-param-last"><span class="toc-number">4.</span> <span class="toc-text">default-param-last</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#eqeqeq"><span class="toc-number">5.</span> <span class="toc-text">eqeqeq</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#no-use-before-define"><span class="toc-number">6.</span> <span class="toc-text">no-use-before-define</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E5%86%99%E5%87%BA%E4%BC%98%E9%9B%85%E7%9A%84%E4%BB%A3%E7%A0%81"><span class="toc-number"></span> <span class="toc-text">如何写出优雅的代码</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B8%90%E8%BF%9B%E5%BC%8F%E9%87%8D%E6%9E%84"><span class="toc-number">1.</span> <span class="toc-text">渐进式重构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%AB%98%E5%86%85%E8%81%9A%E4%BD%8E%E8%80%A6%E5%90%88"><span class="toc-number">2.</span> <span class="toc-text">高内聚低耦合</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%88%E7%90%86%E5%86%97%E4%BD%99"><span class="toc-number">3.</span> <span class="toc-text">合理冗余</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8B%92%E7%BB%9D%E8%BF%87%E5%BA%A6%E6%8A%BD%E8%B1%A1"><span class="toc-number">4.</span> <span class="toc-text">拒绝过度抽象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9C%BC%E8%A7%82%E5%85%AD%E8%B7%AF"><span class="toc-number">5.</span> <span class="toc-text">眼观六路</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number"></span> <span class="toc-text">总结</span></a></div></div></div></div></main><footer id="footer" style="background-image: url('https://gzw.sinaimg.cn/mw690/0065BA7Bgy1hfmiq1gfijj31c20w8tmk.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By SailY</div><div class="footer_custom_text"><a target="_blank" rel="noopener" href="http://beian.miit.gov.cn/"><span>冀ICP备2023024512号</span></a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+  if ($mermaid.length === 0) return
+  const runMermaid = () => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    Array.from($mermaid).forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+      const mermaidThemeConfig = '%%{init:{ \'theme\':\'' + theme + '\'}}%%\n'
+      const mermaidID = 'mermaid-' + index
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+
+      const renderV10 = () => {
+        renderFn.then(({svg}) => {
+          mermaidSrc.insertAdjacentHTML('afterend', svg)
+        })
+      }
+
+      const renderV9 = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+      }
+
+      typeof renderFn === 'string' ? renderV9(renderFn) : renderV10()
+    })
+  }
+
+  const loadMermaid = () => {
+    window.loadMermaid ? runMermaid() : getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(runMermaid)
+  }
+
+  btf.addModeChange('mermaid', runMermaid)
+
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-nest.min.js"></script><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-heart.min.js" async="async" mobile="false"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
